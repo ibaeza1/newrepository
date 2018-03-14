@@ -1,109 +1,103 @@
-            
-
-#class Medidor:
- #   def __init__(self):
-
-#      self._kwh = None
- #   @property
-  #  def kwh(self):
-   #     return self._kwh
- #   @kwh.setter
-  #  def kwh(self,kwh):
-   #     self._kwh = kwh
-    #    print(self.kwh)
-
 class Cliente:
-    def __init__(self,nombre,rut):
-        self.nombre = nombre
+    def __init__(self, rut, **kwargs):
+        super().__init__(**kwargs)
         self.rut = rut
 
     def mostrar(self):
-        return self.nombre , self.rut
+        return self.rut
 
     
 class Medidor:
     
-    def __init__(self,kwh):
+    def __init__(self,kwh,**kwargs):
+        super().__init__(**kwargs)
         self.kwh = kwh
         
     def mostrar_kwh(self):
         return int(self.kwh)
+
+
+class Departamento(Medidor, Cliente):
+    
+    def __init__(self,n,**kwargs):
+        super().__init__(**kwargs)
+        self.nombre = n
+        self.lista = []
+                     
+    def es_electrodp(self):
+        rut = input("Rut:")
+        self.rut = rut
+        if self.kwh > 4000:
+            print('{} es electrodependiente'.format(self.nombre))
+            self.lista.append(self.rut)
+        else:
+            print('{} no es electrodependiente'.format(self.nombre))
+        print(self.lista)
     
         
 class Edificio(Departamento):
     
-    def __init__(self,direccion,nombre,kwh,medidor):
-        super().__init__(kwh)
-        self.direccion = direccion
-        self.nombre = nombre
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         
     def ed(self):
+        kwh = int(input('Kwh: '))
+        self.kwh = kwh
         if self.kwh > 10000:
-            print(True)
+            return True
         else:
-            print(False)
+            return False
 
             
-class Casa:
+class Casa(Medidor, Cliente):
     
-    def __init__(self,direc,num,el):
+    def __init__(self, direc, num, **kwargs):
+        super().__init__(**kwargs)
         self.direc = direc
-        self.ed = False
         self.num = num
-        self.el = int(el)
         
     def electro_dependiente(self):
-        if self.el > 5000:
+        k = int(input('Kwh: '))
+        self.kwh = k
+        if self.kwh > 5000:
             return True
         else:
             return False
 
         
-class Comuna(Casa):
+class Comuna(Casa, Edificio):
     
-    def __init__(self,nombre,direc,num,el):
+    def __init__(self, nombre, **kwargs):
+        super().__init__(**kwargs)
         self.nombre = nombre
-        super().__init__(direc,num,el)
         self.lista_casas = []
+        self.lista_departamentos = []
         
     def agregar_casa(self):
+        n = input('Numero de Casa: ')
+        self.num = n
         if self.electro_dependiente() == True:
-            self.lista_casas.append(self.direc)
+            self.lista_casas.append(self.num)
         else:
             pass
         print(self.lista_casas)
     def agregar_edificio(self):
-        pass
-
-
-class Departamento(Medidor,Cliente):
-    
-    def __init__(self,nombre,kwh):
-        super().__init__(kwh)
-        self.nombre = nombre
-                     
-    def es_electrodp(self):   
-        if self.kwh > 4000:
-            print('{} es electrodependiente'.format(self.nombre))
+        c = input('Rut del dueno: ')
+        self.rut = c
+        if self.ed() == True:
+            self.lista_departamentos.append(self.rut)
         else:
-            print('{} no es electrodependiente'.format(self.nombre))
-            
+            pass
+        print(self.lista_departamentos)
 
-#perro = Comuna('hola','213','2312',123123)
-#perro.agregar_casa()
-#med = Edificio('gh','A',a)
+
+
+comuna = Comuna('Las Condes', direc = 'Manquehue', num = '', rut = '', kwh = '',n = '' )
 i = 0
-
 while i <= 4:
-    a = int(input('Kwh:'))
-    b = input('direc:')
-    perro = Comuna('hola',b,'2312',a)
-    perro.agregar_casa()
+    comuna.agregar_casa()
+    comuna.agregar_edificio()
     i += 1
-    
-    
-
-
 
 
 
